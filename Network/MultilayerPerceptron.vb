@@ -23,7 +23,7 @@ Namespace Network
         Public Property HiddenLayers As List(Of HiddenLayer)
 
         Public Sub New(ByVal num_input As Integer, ByVal num_hidden As Integer(), ByVal num_output As Integer, _
-                       ByVal learning_rate As Double, ByVal momentum As Double, ByRef randomizer As BaseRandom, ByRef activation As BaseActivation)
+                       ByVal learning_rate As Double, ByVal momentum As Double, ByVal randomizer As BaseRandom, ByRef activation As BaseActivation)
 
             'setting properties
             Me.Momentum = momentum
@@ -114,7 +114,7 @@ Namespace Network
                     End If
 
                     'calculating derivative value of input
-                    'node.Primed = Layers(x).ActivationFunction.AbstractDerivative(node.Output)
+                    'node.Primed = Layers(x).ActivationFunction.AbstractedDerivative(node.Output)
                     node.Primed = Layers(x).ActivationFunction.Derivative(node.Input)
 
                     'adjusting weight values between parent layer

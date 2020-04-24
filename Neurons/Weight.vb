@@ -1,7 +1,7 @@
 ﻿Namespace Neurons
     Public Class Weight
 
-        Public Property Value
+        Public Property Value As Double
         Public Property Previous As Double
 
         Public Property Child As Neuron

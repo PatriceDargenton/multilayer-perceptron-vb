@@ -17,7 +17,10 @@ Module Main
 
         Dim standard As New Standard(New Range(-1, 1), DateTime.Now.Millisecond)
 
-        Dim Network As New MultilayerPerceptron(2, {5}, 1, 0.5, 0.8, standard, New BipolarSigmoid(0.5))
+        Dim Network As New MultilayerPerceptron(
+            num_input:=2, num_hidden:={5}, num_output:=1, learning_rate:=0.5,
+            momentum:=0.8, randomizer:=standard, activation:=New BipolarSigmoid(0.5))
+
         Dim Training As New List(Of Training)
         Training.Add(New Training({0, 1}, {1}))
         Training.Add(New Training({0, 0}, {0}))

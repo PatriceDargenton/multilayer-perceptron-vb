@@ -6,7 +6,7 @@ Namespace Randoms
 
         Private Random As Random
 
-        Public Sub New(ByVal range As Range, ByVal seed As Long)
+        Public Sub New(ByVal range As Range, ByVal seed As Integer)
             MyBase.New(range)
             Random = New Random(seed)
         End Sub

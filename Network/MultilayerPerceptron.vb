@@ -22,6 +22,8 @@ Namespace Network
         Public Property OutputLayer As OutputLayer
         Public Property HiddenLayers As List(Of HiddenLayer)
 
+        Public Property Outputs As List(Of List(Of Double))
+
         Public Sub New(ByVal num_input As Integer, ByVal num_hidden As Integer(), ByVal num_output As Integer, _
                        ByVal learning_rate As Double, ByVal momentum As Double, ByVal randomizer As BaseRandom, ByRef activation As BaseActivation)
 
@@ -70,6 +72,7 @@ Namespace Network
         Public Sub Train(ByVal data As List(Of Training), ByVal epochs As Integer, ByVal min_error As Double)
 
             Do
+                Outputs = New List(Of List(Of Double))
                 TotalError = 0.0
                 For Each item In data
                     InputLayer.SetInput(item.Input)
@@ -77,11 +80,49 @@ Namespace Network
                     OutputLayer.AssignErrors(item.Output)
                     BackwardPropogate()
                     TotalError += OutputLayer.CalculateSquaredError()
+                    Outputs.Add(OutputLayer.ExtractOutputs)
                 Next
                 epochs -= 1
             Loop While epochs > 0 And TotalError > min_error
 
         End Sub
+
+        Public Sub TrainOneIteration(ByVal data As List(Of Training))
+
+            Outputs = New List(Of List(Of Double))
+            TotalError = 0.0
+            For Each item In data
+                InputLayer.SetInput(item.Input)
+                ForwardPropogate()
+                OutputLayer.AssignErrors(item.Output)
+                BackwardPropogate()
+                TotalError += OutputLayer.CalculateSquaredError()
+                Outputs.Add(OutputLayer.ExtractOutputs)
+            Next
+
+        End Sub
+
+        Public Function PrintOutput$()
+
+            Dim sb As New System.Text.StringBuilder("{" & vbCrLf)
+            Dim nbOuputs% = Outputs.Count
+            Dim numOuput% = 0
+            For Each outp In Outputs
+                Dim nbd% = outp.Count
+                Dim numd% = 0
+                sb.Append(" {")
+                For Each ld In outp
+                    sb.Append(ld.ToString("0.00").Replace(",", "."))
+                    numd += 1
+                    If numd < nbd Then sb.Append(", ")
+                Next
+                numOuput += 1
+                If numOuput < nbOuputs Then sb.Append("}," & vbCrLf)
+            Next
+            sb.Append("}}")
+            Return sb.ToString
+
+        End Function
 
         Public Sub ForwardPropogate()
 

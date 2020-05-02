@@ -27,13 +27,31 @@ Module Main
         Training.Add(New Training({1, 0}, {1}))
         Training.Add(New Training({1, 1}, {0}))
 
-        Dim result = False
+        'Dim result = False
+        'While Not result
+        '    Network.Train(Training, 5, 0.1)
+        '    Console.WriteLine(String.Format("Total error on correctly predicting training set: {0}", Network.TotalError))
+        '    Console.ReadLine()
+        'End While
 
-        While Not result
-            Network.Train(Training, 5, 0.1)
-            Console.WriteLine(String.Format("Total error on correctly predicting training set: {0}", Network.TotalError))
-            Console.ReadLine()
-        End While
+        Dim nbIterations% = 3000
+        For iteration As Integer = 0 To nbIterations - 1
+
+            Network.TrainOneIteration(Training)
+
+            If (iteration < 10 OrElse
+                ((iteration + 1) Mod 100 = 0 AndAlso iteration < 1000) OrElse
+                ((iteration + 1) Mod 1000 = 0 AndAlso iteration < 10000) OrElse
+                (iteration + 1) Mod 10000 = 0) Then
+                Dim msg$ = vbLf & "Iteration n°" & iteration + 1 & "/" & nbIterations & vbLf &
+                    "Output: " & Network.PrintOutput() & vbLf &
+                    "Average error: " & Network.TotalError.ToString("0.000000")
+                Console.WriteLine(msg)
+            End If
+
+        Next
+        Console.WriteLine("Press a key to quit.")
+        Console.ReadLine()
 
     End Sub
 
